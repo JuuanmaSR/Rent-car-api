@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { AuthModule } from './auth/auth.module';
+
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { ConfigService } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { User } from './users/models/user.model';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    UsersModule,
     SequelizeModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -31,6 +32,7 @@ import { AuthModule } from './auth/auth.module';
       load: [configuration],
     }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
