@@ -16,14 +16,18 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger/dist';
 import { UserEntity } from './entities/userEntity';
+import { Roles } from 'src/role/decorators/role.decorator';
+import { Role } from 'src/role/guards/role.enum';
+import { RoleGuard } from 'src/role/guards/role.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Roles(Role.Admin)
   @Post('create')
   async create(@Res() res, @Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.save(createUserDto);
@@ -32,13 +36,14 @@ export class UsersController {
       user,
     });
   }
-
+  @Roles(Role.Admin)
   @Get('all')
   async findAll(@Res() res) {
     const users = await this.usersService.findAll();
     res.json(users);
   }
 
+  @Roles(Role.Admin)
   @Get(':id')
   async findOne(@Res() res, @Param('id') id: string) {
     const data = await this.usersService.findOne(+id);
@@ -55,6 +60,7 @@ export class UsersController {
     }
   }
 
+  @Roles(Role.Admin)
   @Post('update/:id')
   async update(
     @Res() res,
@@ -68,6 +74,7 @@ export class UsersController {
     });
   }
 
+  @Roles(Role.Admin)
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

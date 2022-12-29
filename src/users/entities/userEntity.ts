@@ -10,4 +10,7 @@ export class UserEntity {
 
   @Expose()
   email: string;
+
+  @Expose()
+  role: string;
 }
