@@ -40,6 +40,7 @@ export class AuthService {
       username: findUser.username,
       password: findUser.password,
       email: findUser.email,
+      role: findUser.role,
     };
     return {
       access_token: this.jwtService.sign(payload),

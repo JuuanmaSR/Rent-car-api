@@ -2,7 +2,6 @@ import {
   Column,
   Model,
   Table,
-  DeletedAt,
   UpdatedAt,
   CreatedAt,
 } from 'sequelize-typescript';
@@ -24,12 +23,12 @@ export class User extends Model {
   @Column({ allowNull: false, unique: true })
   email: string;
 
+  @Column({ defaultValue: 'user' })
+  role: string;
+
   @CreatedAt
   creationDate: Date;
 
   @UpdatedAt
   updatedOn: Date;
-
-  @DeletedAt
-  deletionDate: Date;
 }
