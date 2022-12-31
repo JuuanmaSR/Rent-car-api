@@ -5,13 +5,12 @@ import {
   Body,
   Param,
   Delete,
-  Res,
   HttpException,
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger/dist';
@@ -29,25 +28,34 @@ export class UsersController {
 
   @Roles(Role.Admin)
   @Post('create')
-  async create(@Res() res, @Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.save(createUserDto);
-    res.json({
-      message: 'User was register succesfully',
-      user,
+  async create(@Body() createUserDto: CreateUserDto) {
+    const data = await this.usersService.save(createUserDto);
+    const user = plainToInstance(UserEntity, data, {
+      excludeExtraneousValues: true,
     });
+
+    return {
+      message: 'User was register successfully',
+      user,
+    };
   }
+
   @Roles(Role.Admin)
   @Get('all')
-  async findAll(@Res() res) {
-    const users = await this.usersService.findAll();
-    res.json(users);
+  async findAll() {
+    const data = await this.usersService.findAll();
+    const users = plainToInstance(UserEntity, data, {
+      excludeExtraneousValues: true,
+    });
+
+    return users;
   }
 
   @Roles(Role.Admin)
   @Get(':id')
-  async findOne(@Res() res, @Param('id') id: string) {
-    const data = await this.usersService.findOne(+id);
-    const user = plainToClass(UserEntity, data, {
+  async findOne(@Param('id') id: number) {
+    const data = await this.usersService.findOne(id);
+    const user = plainToInstance(UserEntity, data, {
       excludeExtraneousValues: true,
     });
 
@@ -56,27 +64,27 @@ export class UsersController {
     }
 
     if (user) {
-      res.json(user);
+      return user;
     }
   }
 
   @Roles(Role.Admin)
   @Post('update/:id')
-  async update(
-    @Res() res,
-    @Param('id') id: string,
-    @Body() createUserDto: CreateUserDto,
-  ) {
-    const updatedUser = await this.usersService.update(+id, createUserDto);
-    res.json({
-      message: 'The user was updated succesfully',
-      user: updatedUser,
+  async update(@Param('id') id: number, @Body() createUserDto: CreateUserDto) {
+    const data = await this.usersService.update(id, createUserDto);
+    const updatedUser = plainToInstance(UserEntity, data, {
+      excludeExtraneousValues: true,
     });
+
+    return {
+      message: 'User was update successfully',
+      user: updatedUser,
+    };
   }
 
   @Roles(Role.Admin)
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.usersService.remove(id);
   }
 }

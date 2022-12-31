@@ -1,7 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
 
 export class UserEntity {
+  @Expose()
   id: number;
+
   @Expose()
   username: string;
 
