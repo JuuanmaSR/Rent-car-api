@@ -7,6 +7,7 @@ API RESTful creada con el framework [Nest](https://github.com/nestjs/nest). Su o
 ## Utiliza entre otros modulos
 
   - [Mysql2](https://www.npmjs.com/package/mysql2). Para gestiónar base de datos.
+  - [Sqlite3](https://www.npmjs.com/package/sqlite3). Como opción de base de datos en memoria para testing.
   - [Sequelize](https://www.npmjs.com/package/sequelize). Como ORM(Object-relational-mapping).
   - [Passport](https://www.npmjs.com/package/passport). Como mecanismo de autenticación.
   - [Passport-jwt](https://www.npmjs.com/package/passport-jwt). Para la proteccion de endpoints especificos.
