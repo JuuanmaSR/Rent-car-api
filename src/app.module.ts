@@ -9,6 +9,9 @@ import { ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { User } from './users/models/user.model';
 
+import { CustomersModule } from './customers/customers.module';
+import { Customer } from './customers/models/customer.model';
+
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
@@ -20,7 +23,7 @@ import { User } from './users/models/user.model';
         username: config.get('database.user'),
         password: config.get('database.password'),
         database: config.get('database.name'),
-        models: [User],
+        models: [User, Customer],
         autoLoadModels: true,
       }),
     }),
@@ -31,6 +34,7 @@ import { User } from './users/models/user.model';
     }),
     AuthModule,
     UsersModule,
+    CustomersModule,
   ],
 })
 export class AppModule {}
