@@ -24,7 +24,6 @@ import { Customer } from './customers/models/customer.model';
         password: config.get('database.password'),
         database: config.get('database.name'),
         models: [User, Customer],
-        models: [User],
         autoLoadModels: true,
       }),
     }),
