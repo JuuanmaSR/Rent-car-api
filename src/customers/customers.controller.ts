@@ -21,11 +21,14 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerEntity } from './entities/customerEntity';
 
+@ApiBearerAuth()
 @ApiTags('Customers')
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
+  @Roles(Role.Admin)
   @Post('create')
   async create(@Body() customerData: CreateCustomerDto) {
     const data = await this.customersService.save(customerData);
@@ -38,6 +41,7 @@ export class CustomersController {
     };
   }
 
+  @Roles(Role.Admin)
   @Get('all')
   async findAll() {
     const data = await this.customersService.findAll();
@@ -52,6 +56,7 @@ export class CustomersController {
     return { customers };
   }
 
+  @Roles(Role.Admin)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.customersService.findOne(id);
@@ -66,6 +71,7 @@ export class CustomersController {
     return { customer };
   }
 
+  @Roles(Role.Admin)
   @Post('update/:id')
   async update(
     @Param('id') id: number,
@@ -86,6 +92,7 @@ export class CustomersController {
     };
   }
 
+  @Roles(Role.Admin)
   @Get('delete/:id')
   async delete(@Param('id') id: number) {
     const customerExist = await this.customersService.findOne(id);
