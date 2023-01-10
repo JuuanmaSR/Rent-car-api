@@ -59,8 +59,8 @@ $ npm run test:cov
 
 ## Diagrama C4
 
-<img src= "https://github.com/JuuanmaSR/Rent-car-api/blob/dev/documentation/c4-diagram/level-1-c4-diagram.png" title="C4-Diagram-level-1">
-<img src= "https://github.com/JuuanmaSR/Rent-car-api/blob/dev/documentation/c4-diagram/level-2-c4-diagram.png" title="C4-Diagram-level-2">
+<img src= "https://github.com/JuuanmaSR/Rent-car-api/blob/master/documentation/c4-diagram/level-1-c4-diagram.png" title="C4-Diagram-level-1">
+<img src= "https://github.com/JuuanmaSR/Rent-car-api/blob/master/documentation/c4-diagram/level-2-c4-diagram.png" title="C4-Diagram-level-2">
 
 ## License
 
