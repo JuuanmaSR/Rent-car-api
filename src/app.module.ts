@@ -11,6 +11,7 @@ import { User } from './users/models/user.model';
 
 import { CustomersModule } from './customers/customers.module';
 import { Customer } from './customers/models/customer.model';
+import { CarsModule } from './cars/cars.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { Customer } from './customers/models/customer.model';
     AuthModule,
     UsersModule,
     CustomersModule,
+    CarsModule,
   ],
 })
 export class AppModule {}
