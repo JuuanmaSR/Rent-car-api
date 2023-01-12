@@ -121,6 +121,16 @@ describe('CustomersController', () => {
       expect(result.customers[1] instanceof CustomerEntity).toEqual(true);
       expect(service.findAll).toHaveBeenCalledTimes(1);
     });
+
+    it('must return a error if customers not found', async () => {
+      jest
+        .spyOn(service, 'findAll')
+        .mockImplementation(() => Promise.resolve(null));
+
+      await expect(controller.findAll()).rejects.toThrowError(
+        'Customers not found',
+      );
+    });
   });
 
   describe('Find a customer', () => {
