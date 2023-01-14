@@ -11,6 +11,8 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/role/decorators/role.decorator';
+import { Role } from 'src/role/guards/role.enum';
 import { RoleGuard } from 'src/role/guards/role.guard';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
@@ -24,6 +26,7 @@ import { CarEntity } from './entities/car.entity';
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
+  @Roles(Role.Admin)
   @Post('create')
   async create(@Body() createCarDto: CreateCarDto) {
     const data = await this.carsService.save(createCarDto);
@@ -35,7 +38,7 @@ export class CarsController {
       car,
     };
   }
-
+  @Roles(Role.Admin)
   @Get('all')
   async findAll() {
     const data = await this.carsService.findAll();
@@ -50,6 +53,7 @@ export class CarsController {
     return { cars };
   }
 
+  @Roles(Role.Admin)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.carsService.findOne(id);
@@ -64,6 +68,7 @@ export class CarsController {
     return { car };
   }
 
+  @Roles(Role.Admin)
   @Post('update/:id')
   async update(@Param('id') id: number, @Body() updateCarDto: UpdateCarDto) {
     const data = await this.carsService.update(id, updateCarDto);
@@ -76,6 +81,7 @@ export class CarsController {
     };
   }
 
+  @Roles(Role.Admin)
   @Get('delete/:id')
   async delete(@Param('id') id: number) {
     const carExist = await this.carsService.findOne(id);
