@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCarDto } from './dto/create-car.dto';
+import { InjectModel } from '@nestjs/sequelize';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { Car } from './models/car.model';
 
 @Injectable()
 export class CarsService {
-  create(createCarDto: CreateCarDto) {
-    return 'This action adds a new car';
+  constructor(
+    @InjectModel(Car)
+    private carModel: typeof Car,
+  ) {}
+
+  async save(car: any): Promise<Car> {
+    let carModel: Car;
+    const buildOptions = { isNewRecord: !car.id };
+    carModel = this.carModel.build(car, buildOptions);
+    carModel = await carModel.save();
+    return carModel;
   }
 
-  findAll() {
-    return `This action returns all cars`;
+  async findAll(): Promise<Car[]> {
+    return await this.carModel.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  async findOne(id: number): Promise<Car> {
+    return await this.carModel.findByPk(id);
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+  async update(id: number, car: any): Promise<Car> {
+    const updatedCar = car;
+    updatedCar.id = id;
+    return await this.save(updatedCar);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} car`;
+  async delete(id: number) {
+    return await this.carModel.destroy({ where: { id: id } });
   }
 }

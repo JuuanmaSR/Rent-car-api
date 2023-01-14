@@ -1,34 +1,91 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RoleGuard } from 'src/role/guards/role.guard';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { CarEntity } from './entities/car.entity';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RoleGuard)
+@ApiTags('Cars')
 @Controller('cars')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
-  @Post()
-  create(@Body() createCarDto: CreateCarDto) {
-    return this.carsService.create(createCarDto);
+  @Post('create')
+  async create(@Body() createCarDto: CreateCarDto) {
+    const data = await this.carsService.save(createCarDto);
+    const car = plainToInstance(CarEntity, data, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      message: 'Car has been created successfully',
+      car,
+    };
   }
 
-  @Get()
-  findAll() {
-    return this.carsService.findAll();
+  @Get('all')
+  async findAll() {
+    const data = await this.carsService.findAll();
+    const cars = plainToInstance(CarEntity, data, {
+      excludeExtraneousValues: true,
+    });
+
+    if (!cars) {
+      throw new HttpException('Cars not found', HttpStatus.NOT_FOUND);
+    }
+
+    return { cars };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carsService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    const data = await this.carsService.findOne(id);
+    const car = plainToInstance(CarEntity, data, {
+      excludeExtraneousValues: true,
+    });
+
+    if (!car) {
+      throw new HttpException('Car not found', HttpStatus.NOT_FOUND);
+    }
+
+    return { car };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(+id, updateCarDto);
+  @Post('update/:id')
+  async update(@Param('id') id: number, @Body() updateCarDto: UpdateCarDto) {
+    const data = await this.carsService.update(id, updateCarDto);
+    const car = plainToInstance(CarEntity, data, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      message: 'Car has been updated successfully',
+      car,
+    };
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.carsService.remove(+id);
+  @Get('delete/:id')
+  async delete(@Param('id') id: number) {
+    const carExist = await this.carsService.findOne(id);
+    if (!carExist) {
+      throw new HttpException('Car not found', HttpStatus.NOT_FOUND);
+    }
+    const isDeleted = await this.carsService.delete(id);
+
+    return isDeleted
+      ? { message: 'Car has been deleted successfully' }
+      : { message: "Car hasn't been deleted successfully" };
   }
 }
