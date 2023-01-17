@@ -71,6 +71,11 @@ export class CarsController {
   @Roles(Role.Admin)
   @Post('update/:id')
   async update(@Param('id') id: number, @Body() updateCarDto: UpdateCarDto) {
+    const carExist = await this.carsService.findOne(id);
+    if (!carExist) {
+      throw new HttpException('Car not found', HttpStatus.NOT_FOUND);
+    }
+
     const data = await this.carsService.update(id, updateCarDto);
     const car = plainToInstance(CarEntity, data, {
       excludeExtraneousValues: true,

@@ -134,7 +134,7 @@ describe('CustomersController', () => {
   });
 
   describe('Find a customer', () => {
-    it('must return an customer of CustomerEntity type', async () => {
+    it('must return a customer of CustomerEntity type', async () => {
       jest
         .spyOn(service, 'findOne')
         .mockImplementation(() =>
