@@ -25,7 +25,7 @@ describe('CustomersService', () => {
     service = new CustomersService(Customer);
   });
 
-  afterAll(() => memoryDb.close());
+  afterAll(async () => await memoryDb.close());
 
   describe('create a customer', () => {
     afterEach(async () => {

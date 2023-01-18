@@ -11,7 +11,7 @@ describe('UserService', () => {
     memoryDb = await createMemDb([User]);
     service = new UsersService(User);
   });
-  afterAll(() => memoryDb.close());
+  afterAll(async () => await memoryDb.close());
 
   describe('find users', () => {
     let firstUser: User;
