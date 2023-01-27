@@ -11,7 +11,10 @@ import { User } from './users/models/user.model';
 
 import { CustomersModule } from './customers/customers.module';
 import { Customer } from './customers/models/customer.model';
+
 import { CarsModule } from './cars/cars.module';
+import { Car } from './cars/models/car.model';
+
 
 @Module({
   imports: [
@@ -24,7 +27,7 @@ import { CarsModule } from './cars/cars.module';
         username: config.get('database.user'),
         password: config.get('database.password'),
         database: config.get('database.name'),
-        models: [User, Customer],
+        models: [User, Customer, Car],
         autoLoadModels: true,
       }),
     }),
@@ -39,4 +42,4 @@ import { CarsModule } from './cars/cars.module';
     CarsModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
