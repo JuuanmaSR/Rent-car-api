@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsString, IsEmail, IsDate } from 'class-validator';
+import { IsString, IsEmail, } from 'class-validator';
 
 export class CreateCustomerDto {
   @ApiProperty()
@@ -8,10 +8,12 @@ export class CreateCustomerDto {
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   firstName: string;
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   lastName: string;
 
   @ApiProperty()
@@ -33,14 +35,15 @@ export class CreateCustomerDto {
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   address: string;
 
   @ApiProperty()
-  @IsDate()
-  @Transform(({ value }) => new Date(value))
-  dateOfBirth: Date;
+  @IsString()
+  dateOfBirth: string;
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   nationality: string;
 }
