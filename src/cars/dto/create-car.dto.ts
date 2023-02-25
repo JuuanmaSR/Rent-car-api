@@ -8,10 +8,12 @@ export class CreateCarDto {
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   model: string;
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   brand: string;
 
   @ApiProperty()
@@ -26,17 +28,11 @@ export class CreateCarDto {
 
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.toLowerCase())
   color: string;
 
   @ApiProperty()
   @IsBooleanString()
-  //   @Transform(({ value }) => {
-  //     if (value === 'true') {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   })
   airConditioner: boolean;
 
   @ApiProperty()

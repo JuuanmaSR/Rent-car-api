@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
